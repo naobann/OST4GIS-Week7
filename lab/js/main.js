@@ -124,16 +124,23 @@ the week was the most common for garbage removal? Update the original state
 of the application to report this information.
 
 ===================== */
+//task 1
+var dataset = "https://raw.githubusercontent.com/CPLN-692-401/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
+//task 2
+var featureGroup = {MON: "red",TUE:"blue",WED:"yellow",THU:"grey",FRI:"black"};
+//var myStyle = function(feature) {return {fillColor:featureGroup[feature.properties.COLLDAY]}};
+var myStyle = function(feature){
+  switch (feature.properties.COLLDAY){
+    case 'MON': return {color: "#db4437"};
+    case 'TUE': return {color: "#0c457d"};
+    case 'WED': return {color: "#ff9900"};
+    case 'THU': return {color: "#88b985"};
+    case 'FRI': return {color: "#e55e9b"};
+  }
+}
 
-var dataset = ""
-var featureGroup;
-
-var myStyle = function(feature) {
-  return {};
-};
-
-var showResults = function() {
-  /* =====================
+var showResults = function(data) {
+    /* =====================
   This function uses some jQuery methods that may be new. $(element).hide()
   will add the CSS "display: none" to the element, effectively removing it
   from the page. $(element).show() removes "display: none" from an element,
@@ -145,21 +152,24 @@ var showResults = function() {
   $('#results').show();
 };
 
-
+//task 4
 var eachFeatureFunction = function(layer) {
   layer.on('click', function (event) {
-    /* =====================
-    The following code will run every time a layer on the map is clicked.
-    Check out layer.feature to see some useful data about the layer that
-    you can use in your application.
-    ===================== */
-    console.log(layer.feature);
+    var day;
+    if (layer.feature.properties.COLLDAY==='MON'){day = 'Monday'}
+    else if (layer.feature.properties.COLLDAY==='TUE'){day = 'Tuesday'}
+    else if (layer.feature.properties.COLLDAY==='WED'){day = 'Wednesday'}
+    else if (layer.feature.properties.COLLDAY==='THU'){day = 'Thursday'}
+    else if (layer.feature.properties.COLLDAY==='FRI'){day = 'Friday'}
+    else {return 'Invalid Weekday'}
+    $('.day-of-week').text(day)
     showResults();
   });
 };
 
-var myFilter = function(feature) {
-  return true;
+//task 3
+var myFilter = function(feature) {if(feature.properties.COLLDAY!==" ")
+  {return true};
 };
 
 $(document).ready(function() {
